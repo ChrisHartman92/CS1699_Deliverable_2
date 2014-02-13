@@ -5,7 +5,7 @@ import classify
 	We should probably also check to make sure all underscores are replaced.
 	More unit tests are possible if we really need it as well.
 '''
-def personQuest():
+def personQuest(sentences):
  cannedarray=[]
  cannedarray.append('On what date was %s born?' % sentences[0].replace('_',' '))
  cannedarray.append('On what date did %s die?' % sentences[0].replace('_',' '))
@@ -17,7 +17,7 @@ def personQuest():
  cannedarray.append('Does the article mention that %s published anything?' % sentences[0].replace('_',' '))
  return cannedarray
 
-def languageQuest(): 
+def languageQuest(sentences): 
  cannedarray=[]
  cannedarray.append('Where is the %s spoken?' % sentences[0].replace('_',' '))
  cannedarray.append('What language family is the %s a part of?' % sentences[0].replace('_',' '))
@@ -28,7 +28,7 @@ def languageQuest():
  cannedarray.append('How many vowels does %s have?' % sentences[0].replace('_',' '))
  return cannedarray
 
-def cityQuest():
+def cityQuest(sentences):
  cannedarray=[]
  cannedarray.append('What is the population of %s?' % sentences[0].replace('_',' '))
  cannedarray.append('In what country is %s?' % sentences[0].replace('_',' '))
@@ -39,7 +39,7 @@ def cityQuest():
  cannedarray.append('What kind of climate does %s have?' % sentences[0].replace('_',' '))
  return cannedarray
 
-def instrumentQuest():
+def instrumentQuest(sentences):
  cannedarray=[]
  cannedarray.append('What is the %s?' % sentences[0].replace('_',' '))
  cannedarray.append('How is the %s played?' % sentences[0].replace('_',' '))
@@ -56,13 +56,13 @@ def instrumentQuest():
 	We can have a few tests that we expect to fail here (entering an int should not work), and we can include that in the write up.
 	We can also make sure that classify.classify_article() returns what it should based on what it is fed.
 '''
-def getClassification(article):
+def getClassification(article, sentences):
  classification=classify.classify_article(article)
  if classification == 'person':
-  return personQuest()
+  return personQuest(sentences)
  elif classification == 'language':
-  return languageQuest()
+  return languageQuest(sentences)
  elif classification == 'city':
-  return cityQuest()
+  return cityQuest(sentences)
  elif classification == 'instrument':
-  return instrumentQuest()
+  return instrumentQuest(sentences)

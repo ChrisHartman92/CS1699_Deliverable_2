@@ -20,7 +20,7 @@ sentences = sentfile.read().split('\n')
 sentfile.close()
 cannedarray=[]
 
-cannedarray = askfunc.getClassification(article)
+cannedarray = askfunc.getClassification(article, sentences)
 
 for i in range(1,nquestions):
   print cannedarray[i-1]
