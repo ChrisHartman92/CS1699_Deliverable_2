@@ -21,17 +21,9 @@ sentfile.close()
 cannedarray=[]
 
 cannedarray = askfunc.getClassification(article, sentences)
+askfunc.printQuests(nquestions, cannedarray)
 
-for i in range(1,nquestions):
-  print cannedarray[i-1]
-  if i==len(cannedarray):
-    nquestions=nquestions-i
-    break
 questionarray=[]
-
-def fappend(base,item):
-  base+=item
-  return base
 
 f = open(sentname)
 text=f.read()
@@ -54,7 +46,7 @@ for line in f:
   replaced=0
   for i in range(size):
     if line[i] not in string.whitespace:
-      word = fappend(word,line[i])
+      word = askfunc.fappend(word,line[i])
       if word=='city':
         citycount+=1
     else:

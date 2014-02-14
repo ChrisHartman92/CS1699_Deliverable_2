@@ -203,7 +203,42 @@ class TestClassification(unittest.TestCase) :
 		word = ['grand_piano']
 		sentences = askfunc.instrumentQuest(word)
 		self.assertEquals(correctSentences, sentences)
+	
+	'''
+		Function under test: fappend()
+		Location of function: askfunc
+		Purpose of test: To ensure that fappend concatenates two strings correctly 
+		Notes: N/a
+	'''
 
+	def test_fappend_words(self) :
+		testword1 = "test"
+		testword2 = "this"
+		testword1 = testword1 + testword2
+		self.assertEquals(testword1, askfunc.fappend('test', 'this'))
+	'''
+		Function under test: fappend()
+		Location of function: askfunc
+		Purpose of test: To ensure that fappend concatenates two lists correctly
+		Notes: N/a 
+	'''
+
+	def test_fappend_lists(self) :
+		testlist1 = ['a', 'b', 'c']
+		testlist2 = ['d', 'e']
+		testlist1 = testlist1 + testlist2
+		self.assertEquals(testlist1, askfunc.fappend(testlist1, testlist2))
+	'''
+		Function under test: fappend()
+		Location of function: askfunc
+		Purpose of test: To ensure that fappend does not concatenate a string and list
+		Notes: Test designed to fail
+	'''
+	def test_fappend_mixed(self) :
+		testword1 = "test"
+		testlist1 = ['a', 'b', 'c']
+		testword = testword1 + testlist1
+		self.assertEquals(testword, askfunc.fappend(testword1, testlist1))	
 
 if __name__ == '__main__' :
 	unittest.main()
