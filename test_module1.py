@@ -5,6 +5,7 @@ from mock import patch, Mock, MagicMock
 
 class TestClassification(unittest.TestCase) :
 
+
 	'''
 		Function under test: getClassification()
 		Location of function: askfunc
@@ -239,6 +240,52 @@ class TestClassification(unittest.TestCase) :
 		testlist1 = ['a', 'b', 'c']
 		testword = testword1 + testlist1
 		self.assertEquals(testword, askfunc.fappend(testword1, testlist1))	
+	
+	'''
+		Function under test: printQuests()
+		Location of function: askfunc
+		Purpose of test: To ensure that printQuests prints out questions correctly, this case tests condition that nquestions is less than the length of		canned array 
+		Notes: printQuests modified due to difficulty mocking print keyword, returnarray added
+	'''
+
+
+	def test_printQuests_under(self) :
+		testinput = ['String1', 'String 2', 'String3']
+		testnum = 2
+		testoutput = []	
+		testoutput = askfunc.printQuests(testnum, testinput)
+		expectedoutput = ['String1']
+		self.assertEquals(testoutput, expectedoutput)
+
+	'''
+		Function under test: printQuests()
+		Location of function: askfunc
+		Purpose of test: To ensure that printQuests prints out questions correctly, this case tests condition that nquestions is equal to the length of		canned array 
+		Notes: printQuests modified due to difficulty mocking print keyword, returnarray added
+	'''
+
+	def test_printQuests_exact(self) :
+		testinput = ['String1', 'String2', 'String3']
+		testnum = 3
+		testoutput = []	
+		testoutput = askfunc.printQuests(testnum, testinput)
+		expectedoutput = ['String1', 'String2']
+		self.assertEquals(testoutput, expectedoutput)
+
+	'''
+		Function under test: printQuests()
+		Location of function: askfunc
+		Purpose of test: To ensure that printQuests prints out questions correctly, this case tests condition that nquestions is greater than the length of		canned array 
+		Notes: printQuests modified due to difficulty mocking print keyword, returnarray added
+	'''
+
+	def test_printQuests_over(self) :
+		testinput = ['String1', 'String2', 'String3']
+		testnum = 5
+		testoutput = []	
+		testoutput = askfunc.printQuests(testnum, testinput)
+		expectedoutput = ['String1', 'String2', 'String3']
+		self.assertEquals(testoutput, expectedoutput)
 
 if __name__ == '__main__' :
 	unittest.main()

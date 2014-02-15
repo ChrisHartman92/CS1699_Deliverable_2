@@ -71,9 +71,12 @@ def fappend(base,item) :
   base+=item
   return base
 
-def printQuests(nquestions, cannedarray) :
+def printQuests(nquestions,cannedarray) :
+	returnarray = []
 	for i in range(1,nquestions) :
 		print cannedarray[i-1]
+		returnarray.append(cannedarray[i-1])
 		if i == len(cannedarray) :
 			nquestions = nquestions - i
-			break
+			break;
+	return returnarray
