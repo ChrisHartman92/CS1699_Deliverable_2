@@ -100,9 +100,9 @@ for line in f:
         break
 
     randvar=random.random()
-    vstring=qstring.strip()
-    vstring=vstring.replace(vstring[0],vstring[0].lower())
-    verbose='According to the information given in the article, '+vstring
+	vstring = askfunc.standardize(vstring)
+    
+	verbose = askfunc.makeVerbose(vstring)
 
     qtagged = nltk.pos_tag(question)                        
 
@@ -145,16 +145,8 @@ f.seek(0)
       isq=isq.replace(isq[0],isq[0].lower())
       isq=isq.replace(' is ',' ')
       questionarray.append('Is %s?' % (isq[0:len(isq)-1]))'''
-      
-for q in questionarray:
-  if re.search(r"\(.*who.*\)",q):
-    questionarray.remove(q)
-    continue
-  tokened=nltk.word_tokenize(q)
-  if len(tokened)<10:
-    fluency=evaluate.question_score(q)
-    if fluency>6:
-      questionarray.remove(q)
+
+askfunc.removeQuestions(questionarray)
 
 for line in f:
   for m in re.finditer("[1-2]{0,1}[0-9]\s((January)|(February)|(March)|(April)|(May)|(June)|(July)|(August)|(September)|(October)|(November)|(December))\s([0-2][0-9][0-9][0-9])",line):

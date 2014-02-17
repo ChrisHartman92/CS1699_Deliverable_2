@@ -1,6 +1,7 @@
 import unittest
 import askfunc
 import classify
+import evaluate
 from mock import patch, Mock, MagicMock
 
 class TestClassification(unittest.TestCase) :
@@ -286,6 +287,183 @@ class TestClassification(unittest.TestCase) :
 		testoutput = askfunc.printQuests(testnum, testinput)
 		expectedoutput = ['String1', 'String2', 'String3']
 		self.assertEquals(testoutput, expectedoutput)
+
+	'''
+		Function under test: removeQuestions()
+		Location of function: askfunc
+		Purpose of test: To ensure that getfluency() is called when the length of the question is less than 10 words
+	'''
+	@patch.object(askfunc, 'getfluency')
+	def test_remove_under(self, mock_getfluency) :
+		testarray = []
+		testarray.append('one two three four five')
+		askfunc.removeQuestions(testarray)
+		mock_getfluency.assert_called()
+	
+	'''
+		Function under test: removeQuestions()
+		Location of function: askfunc
+		Purpose of test: To ensure that getfluency() is not called when the length of the question exactly 10 words
+		'''
+	@patch.object(askfunc, 'getfluency')
+	def test_remove_equal(self, mock_getfluency) :
+		testarray = []
+		testarray.append('one two three four five six seven eight nine ten')
+		askfunc.removeQuestions(testarray)
+		assert not mock_getfluency.called, 'Get fluency was called even though '
+	
+	'''
+		Function under test: removeQuestions()
+		Location of function: askfunc
+		Purpose of test: To ensure that getfluency() is called when the length of the question over 10 words
+		'''
+	@patch.object(askfunc, 'getfluency')
+	def test_remove_over(self, mock_getfluency) :
+		testarray = []
+		testarray.append('one two three four five six seven eight nine ten eleven')
+		askfunc.removeQuestions(testarray)
+		mock_getfluency.assert_called()
+	
+	'''
+		Function under test: removeQuestions()
+		Location of function: askfunc
+		Purpose of test: To ensure that questions with the word 'who' in them are removed
+	'''
+	
+	def test_remove_who(self):
+		testarray = []
+		testarray.append('that student is the one who studies computer science')
+		askfunc.removeQuestions(testarray)
+		self.assertTrue(len(testarray) == 0)
+	
+	'''
+		Function under test: removeQuestions()
+		Location of function: askfunc
+		Purpose of test: To ensure that questions without the word 'who' in them are kept
+		'''
+	
+	def test_keep_question(self):
+		testarray = []
+		testarray.append('that student studies computer science')
+		askfunc.removeQuestions(testarray)
+		self.assertTrue(len(testarray) == 1)
+	
+	'''
+		Function under test: makeVerbose()
+		Loaction of function: askfunc
+		Purpose of test: To ensure that makeVerbose appends the passed in string to the end of 'According to the information in the article, '
+	'''
+	def test_make_verbose(self):
+		in_string = 'did George Washington cut down a cherry tree'
+		returned_string = askfunc.makeVerbose(in_string)
+		self.assertTrue('According to the information given in the article, did George Washington cut down a cherry tree' == returned_string)
+	
+	'''
+		Function under test: getfluency()
+		Location of function: askfunc
+		Purpose fo test: To ensure that getfluency calls evaluate.question_score()
+	'''
+	@patch.object(evaluate, 'question_score')
+	def test_getfluency(self, mock_question_score) :
+		mock_question_score.return_value = 5
+		mock = MagicMock()
+		with mock as q :
+			value = askfunc.getfluency(q)
+		mock_question_score.assert_called()
+
+	'''
+		Function under test: standardize()
+		Location of function: askfunc
+		Purpose of test: To ensure that leading and trailing whitespace is stripped in the manner of the built-in strip() function
+		Notes: standardize() may call strip() itself, but we need to be sure that no other changes are made to a lower case string
+	'''
+	def test_standardize_whitespace(self) :
+		input_str = '   test input with leading and trailing whitespace       '
+		ret_str = askfunc.standardize(input_str)
+		self.assertTrue(ret_str == input_str.strip())
+
+	'''
+		Function under test: standardize()
+		Location of function: askfunc
+		Purpose of test: To ensure that if the sentence is capitalized, it comes out uncapitalized after being run through standardized()
+	'''
+	def test_standardize_capitalization(self) :
+		input_str = 'The first letter of the first word of this test input should be lower case'
+		ret_str = askfunc.standardize(input_str)
+		self.assertTrue(ret_str[0] == 't')
+	
+	'''
+		Function under test: standardize()
+		Location of function: askfunc
+		Purpose of test: To ensure that if the sentence is capitalized, it comes out uncapitalized after being run through standardized() even if there is leading whitespace
+	'''
+	def test_standardize_both(self) :
+		input_str = '    The first letter of the first word of this test input should be lower case'
+		ret_str = askfunc.standardize(input_str)
+		self.assertTrue(ret_str[0] == 't')
+
+	'''
+		Function under test: standardize()
+		Location of function: askfunc
+		Purpose of test: To ensure that if the sentence is not capitalized and there is no leading/trailing whitespace that standardize() does not change it
+	'''
+	def test_standardize_standardized(self) :
+		input_str = 'this sentence is already standardized so standardize() should have no effect'
+		ret_str = askfunc.standardize(input_str)
+		self.assertTrue(input_str == ret_str)
+
+	'''
+		Functino under test: removeQuestions
+		Loaction of function: askfunc
+		Purpose of test: To ensure that if a question contains 'who' it is not tokenized (because it should be removed, as in an earlier test)
+		Notes: this test fails currently
+	'''
+	@patch.object(askfunc, 'tokenize')
+	def test_who_fluency(self, mock_tokenize) :
+		testarray = []
+		testarray.append('that student is the one who studies computer science')
+		askfunc.removeQuestions(testarray)
+		self.assertTrue(not mock_tokenize.called)
+
+	'''
+		Function under test: shouldCompare
+		Loaction of function: askfunc
+		Purpose of test: To ensure that shouldCompare returns true for arrays smaller than 10 characters
+	'''
+	def test_compare_small(self) :
+		testarray = ['one','two']
+		ret_bool = askfunc.shouldCompare(testarray)
+		self.assertTrue(ret_bool == True)
+	
+	'''
+		Function under test: shouldCompare
+		Loaction of function: askfunc
+		Purpose of test: To ensure that shouldCompare returns false for arrays larger than 10
+	'''
+	def test_compare_big(self) :
+		testarray = ['one','two','three','four','five','six','seven','eight','nine','ten','eleven']
+		ret_bool = askfunc.shouldCompare(testarray)
+		self.assertTrue(ret_bool == False)
+	
+	'''
+		Function under test: shouldCompare
+		Loaction of function: askfunc
+		Purpose of test: To ensure that shouldCompare returns false for arrays of exactly 10
+	'''
+	def test_compare_edge(self) :
+		testarray = ['one','two','three','four','five','six','seven','eight','nine','ten']
+		ret_bool = askfunc.shouldCompare(testarray)
+		self.assertTrue(ret_bool == False)
+	
+	'''
+		Function under test: shouldCompare
+		Loaction of function: askfunc
+		Purpose of test: To ensure that shouldCompare returns true for arrays smaller than 10
+	'''
+	def test_compare_small(self) :
+		testarray = ['one','two']
+		ret_bool = askfunc.shouldCompare(testarray)
+		self.assertTrue(ret_bool == True)
 
 if __name__ == '__main__' :
 	unittest.main()

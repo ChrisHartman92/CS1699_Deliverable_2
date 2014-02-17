@@ -1,5 +1,7 @@
 import classify
-
+import evaluate
+import re
+import nltk
 '''
 	A possible unit test for these four functions found below would be to compare the cannedarray before and after the array. Before should be empty, after should be not.
 	We should probably also check to make sure all underscores are replaced.
@@ -80,3 +82,34 @@ def printQuests(nquestions,cannedarray) :
 			nquestions = nquestions - i
 			break;
 	return returnarray
+
+def makeVerbose(vstring):
+	verbose='According to the information given in the article, '+vstring
+	return verbose
+
+def removeQuestions(questionarray):
+	for q in questionarray:
+		if re.search(r"\(.*who.*\)",q):
+			questionarray.remove(q)
+			continue
+		tokened = tokenize(q)
+		b = shouldCompare(tokened)
+		if b:
+			fluency = getfluency(q)
+			if fluency>6:
+				questionarray.remove(q)
+
+def shouldCompare(tokened):
+	return len(tokened)<10
+
+def tokenize(q):
+	return nltk.word_tokenize(q)
+
+def getfluency(q) :
+	a = evaluate.question_score(q)
+	return a
+
+def standardize(vstring):
+	vstring=vstring.strip()
+	vstring=vstring.replace(vstring[0],vstring[0].lower())
+	return vstring
